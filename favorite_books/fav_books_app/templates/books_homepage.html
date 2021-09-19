@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorite Books Home</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <h1>Welcome, {{request.session.firstname}}!</h1>
+            <a href="/logout">Log Out</a>
+        </div>
+        <div id="content">
+            {% if messages %}
+            <ul class="message book validations">    
+                {% for message in messages %}    
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            <form action="add_fav_book" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" name="title" id="bookTitle" aria-describedby="emailHelp">
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" name="desc" id="bookdesc" rows="3"></textarea>
+                </div>
+                <!-- <input type="hidden" name="book_id" value="{{book.id}}"> -->
+
+                <button type="submit" class="btn btn-primary">Add</button>
+            </form>
+            <div id="books_list">
+                <h1>All Books</h1>
+                {% for book in all_books %}
+                <div class="all_books">
+                    <a href="/books/{{book.id}}">{{book.title}}</a>
+                    <p>(added by {{book.user_uploads.firstname}})</p>
+                {% endfor %}
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>
